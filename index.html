@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wibisono | Pixel MLOps</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+    <style>
+        /* 1. CSS VARIABLES (Retro Purple Theme) */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #121212;
+            --card-bg: #ffffff;
+            --primary-color: #7f5af0;
+            --primary-hover: #ffffff;
+            --text-hover: #7f5af0;
+            --border-style: 4px solid #121212;
+            --shadow: 6px 6px 0px rgba(0, 0, 0, 0.15);
+            --accent-shadow: 6px 6px 0px rgba(127, 90, 240, 0.3);
+            --transition: all 0.1s steps(4);
+            --header-image: url('day.gif')
+        }
+
+        /* Dark Theme Overrides */
+        [data-theme="dark"] {
+            --bg-color: #16161a;
+            --text-color: #fffffe;
+            --card-bg: #242629;
+            --primary-color: #9f7aea;
+            --primary-hover: #16161a;
+            --text-hover: #fffffe;
+            --border-style: 4px solid #fffffe;
+            --shadow: 6px 6px 0px rgba(255, 255, 255, 0.1);
+            --accent-shadow: 6px 6px 0px rgba(159, 122, 234, 0.3);
+            --header-image: url('bar.gif')
+        }
+
+        /* 2. GLOBAL STYLES */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Jersey 10', sans-serif;
+            font-size: 24px;
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            line-height: 1.5;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* 3. NAVIGATION BAR - Collapsible */
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 40px;
+            background-color: var(--card-bg);
+            border-bottom: var(--border-style);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 10px 15px;
+            border: 4px solid transparent;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:hover {
+            border: var(--border-style);
+            background-color: var(--primary-color);
+            color: var(--primary-hover);
+            box-shadow: var(--shadow);
+            animation: pixel-bounce 0.3s steps(2);
+        }
+
+        @keyframes pixel-bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        #theme-toggle {
+            background: none;
+            border: var(--border-style);
+            color: var(--text-color);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Jersey 10', sans-serif;
+            font-size: 24px;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--primary-hover);
+            box-shadow: var(--shadow);
+            transform: scale(1.05);
+        }
+
+        /* Hamburger Menu Button */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: var(--border-style);
+            transition: var(--transition);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 4px;
+            background-color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .hamburger:hover {
+            background-color: var(--primary-color);
+        }
+
+        .hamburger:hover span {
+            background-color: var(--primary-hover);
+        }
+
+        /* 4. HEADER SECTION */
+        header {
+            text-align: center;
+            padding: 250px 20px;
+            border-bottom: var(--border-style);
+            background-image: var(--header-image);
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            text-shadow: 4px 4px 0px #000000, -2px -2px 0px #000000, 2px -2px 0px #000000, -2px 2px 0px #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 64px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            cursor: pointer;
+            transition: color 0.2s steps(3);
+        }
+
+        h1:hover {
+            color: var(--primary-color);
+        }
+
+        .bio {
+            font-size: 28px;
+            max-width: 700px;
+            margin: 0 auto;
+            min-height: 84px;
+        }
+
+        /* Typewriter Cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 12px;
+            height: 24px;
+            background-color: var(--primary-color);
+            animation: blink 1s steps(2) infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* 5. SECTIONS & CARDS */
+        h2 {
+            font-size: 36px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            padding-bottom: 10px;
+            margin-top: 80px;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s steps(3);
+        }
+
+        h2:hover::after {
+            transform: scaleX(1);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border: var(--border-style);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            image-rendering: pixelated;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, var(--primary-color), transparent, var(--primary-color));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.2s steps(2);
+        }
+
+        .card:hover::before {
+            opacity: 0.3;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--accent-shadow);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 28px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .card p {
+            margin-bottom: 0;
+            font-size: 22px;
+        }
+
+        .card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 16px;
+            border: 3px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .card a:hover {
+            background-color: var(--primary-color);
+            color: var(--primary-hover);
+            box-shadow: 4px 4px 0px var(--text-color);
+            transform: translate(-2px, -2px);
+        }
+
+        /* 6. PIXEL SKILL BARS */
+        .skill-bar-container {
+            margin-top: 15px;
+        }
+
+        .skill-bar-label {
+            font-size: 18px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-bar-track {
+            width: 100%;
+            height: 20px;
+            border: 3px solid var(--text-color);
+            background: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 1.5s steps(20);
+            position: relative;
+        }
+
+        .skill-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--text-color);
+            animation: bar-shine 0.5s steps(2) infinite;
+        }
+
+        @keyframes bar-shine {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* 7. PROJECT THUMBNAIL */
+        .project-thumbnail {
+            width: 100%;
+            height: 200px;
+            border: var(--border-style);
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .project-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(127, 90, 240, 0.3), transparent);
+            transition: left 0.5s steps(5);
+        }
+
+        .card:hover .project-thumbnail::before {
+            left: 100%;
+        }
+
+        /* 8. SCROLL PROGRESS BAR */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: var(--primary-color);
+            z-index: 1001;
+            width: 0%;
+            transition: width 0.1s linear;
+            border-bottom: 2px solid var(--text-color);
+        }
+
+        /* 9. FOOTER PIXEL DECORATION */
+        .pixel-footer {
+            text-align: center;
+            padding: 40px;
+            border-top: var(--border-style);
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .pixel-hearts {
+            font-size: 32px;
+            letter-spacing: 10px;
+        }
+
+        /* 10. LOADING SCREEN */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s steps(5);
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 32px;
+            margin-top: 20px;
+            animation: loading-blink 1s steps(2) infinite;
+        }
+
+        @keyframes loading-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 24px;
+            border: 4px solid var(--text-color);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s steps(5);
+        }
+
+        /* 11. MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 42px;
+            }
+
+            .bio {
+                font-size: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                padding: 15px 20px;
+            }
+
+            .hamburger {
+                display: flex;
+                order: 2;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: var(--border-style);
+                order: 3;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            nav a {
+                width: 100%;
+                text-align: center;
+                font-size: 22px;
+            }
+
+            #theme-toggle {
+                width: 100%;
+                font-size: 22px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 150px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div style="font-size: 64px;">👾</div>
+        <div class="loading-text">INITIALIZING PIXEL ENGINE...</div>
+        <div class="loading-bar">
+            <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <nav>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <button id="theme-toggle">🌙 Dark Mode</button>
+        </div>
+    </nav>
+
+    <header id="home">
+        <div class="header-content">
+            <h1 id="secret-trigger">Wibisono</h1>
+            <p class="bio" id="typewriter-text"></p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="about">
+            <h2>Technical Arsenal</h2>
+            <div class="skills-grid">
+                <div class="card" data-skill="90">
+                    <h3>💻 Programming</h3>
+                    <p>Proficiency in Python and GIT</p>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-label">
+                            <span>Level</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" data-skill="75">
+                    <h3>🐳 Containerization</h3>
+                    <p>Familiarity with Docker and Kubernetes</p>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-label">
+                            <span>Level</span>
+                            <span class="skill-percent">75%</span>
+                        </div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" data-skill="70">
+                    <h3>☁️ Cloud Architecture</h3>
+                    <p>Familiarity with AWS, GCP, and Azure</p>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-label">
+                            <span>Level</span>
+                            <span class="skill-percent">70%</span>
+                        </div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" data-skill="85">
+                    <h3>🤖 Machine Learning</h3>
+                    <p>Familiarity with core Machine Learning concepts</p>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-label">
+                            <span>Level</span>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>Featured Projects</h2>
+            <div class="card">
+                <div class="project-thumbnail">🏥</div>
+                <h3>Healthcare Data Pipeline</h3>
+                <p>Designed for HL7 FHIR Data Streaming to streamline machine learning prediction of high-risk diabetes
+                    patients.</p>
+                <a href="https://github.com/wibssono/hospital-patient-flow" target="_blank">View on GitHub →</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pixel-footer">
+        <div class="pixel-hearts">❤️ 💜 💙 💚 💛</div>
+        <p style="font-size: 18px; margin-top: 10px;">Built with pixels and passion</p>
+    </footer>
+
+    <script>
+        // ===== LOADING SCREEN =====
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loading-bar-fill');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 30;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        initTypewriter();
+                        animateSkillBars();
+                    }, 500);
+                }
+                loadingBar.style.width = progress + '%';
+            }, 200);
+        });
+
+        // ===== COLLAPSIBLE NAVBAR =====
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const navAnchors = navLinks.querySelectorAll('a');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        navAnchors.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // ===== SECRET NAV MENU =====
+        const secretTrigger = document.getElementById('secret-trigger');
+        let clickCount = 0;
+        let clickTimer = null;
+        let secretUnlocked = false;
+
+        secretTrigger.addEventListener('click', () => {
+            clickCount++;
+
+            if (clickCount === 1) {
+                clickTimer = setTimeout(() => {
+                    clickCount = 0;
+                }, 500);
+            }
+
+            if (clickCount === 2) {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                secretUnlocked = !secretUnlocked;
+                toggleSecretMenu();
+            }
+        });
+
+        function toggleSecretMenu() {
+            const existingSecret = document.getElementById('secret-nav');
+
+            if (existingSecret) {
+                existingSecret.remove();
+                return;
+            }
+
+            const secretNav = document.createElement('div');
+            secretNav.id = 'secret-nav';
+            secretNav.innerHTML = `
+                <a href="flappy-bird.html">For Sofia 💜</a>
+            `;
+            secretNav.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--card-bg);
+                border: var(--border-style);
+                box-shadow: var(--shadow);
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                z-index: 999;
+                font-family: 'Jersey 10', sans-serif;
+                font-size: 20px;
+            `;
+
+            document.body.appendChild(secretNav);
+
+            secretNav.querySelectorAll('a').forEach(link => {
+                link.style.cssText = `
+                    color: var(--text-color);
+                    text-decoration: none;
+                    padding: 8px 12px;
+                    border: 3px solid transparent;
+                    transition: all 0.1s steps(4);
+                `;
+                link.addEventListener('mouseenter', () => {
+                    link.style.border = 'var(--border-style)';
+                    link.style.backgroundColor = 'var(--primary-color)';
+                    link.style.color = 'var(--primary-hover)';
+                    link.style.boxShadow = 'var(--shadow)';
+                });
+                link.addEventListener('mouseleave', () => {
+                    link.style.border = '3px solid transparent';
+                    link.style.backgroundColor = 'transparent';
+                    link.style.color = 'var(--text-color)';
+                    link.style.boxShadow = 'none';
+                });
+            });
+
+            const easterEgg = document.getElementById('secret-easter');
+            easterEgg.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('🎮 You found the secret! Level up! 🎮');
+            });
+        }
+
+        // ===== THEME TOGGLE =====
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            htmlElement.setAttribute('data-theme', savedTheme);
+            updateButtonText(savedTheme);
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButtonText(newTheme);
+        });
+
+        function updateButtonText(theme) {
+            themeToggleBtn.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+
+        // ===== TYPEWRITER EFFECT =====
+        const bioText = "An aspiring MLOps Engineer with a strong desire to learn and advance the current world to be AI ready.";
+        const typewriterElement = document.getElementById('typewriter-text');
+        let typeIndex = 0;
+
+        function initTypewriter() {
+            typeIndex = 0;
+            typewriterElement.innerHTML = '';
+            typeNextChar();
+        }
+
+        function typeNextChar() {
+            if (typeIndex < bioText.length) {
+                typewriterElement.innerHTML = bioText.substring(0, typeIndex + 1) + '<span class="typing-cursor"></span>';
+                typeIndex++;
+                setTimeout(typeNextChar, 50 + Math.random() * 50);
+            } else {
+                typewriterElement.innerHTML = bioText + '<span class="typing-cursor"></span>';
+            }
+        }
+
+        // ===== SCROLL PROGRESS =====
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // ===== SKILL BAR ANIMATION =====
+        function animateSkillBars() {
+            const cards = document.querySelectorAll('.card[data-skill]');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const skill = card.getAttribute('data-skill');
+                        const fill = card.querySelector('.skill-bar-fill');
+                        setTimeout(() => {
+                            fill.style.width = skill + '%';
+                        }, 200);
+                        observer.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            cards.forEach(card => observer.observe(card));
+        }
+
+        // ===== SMOOTH SCROLL =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ===== CARD ENTRANCE ANIMATION =====
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transform = 'translateY(30px)';
+                    setTimeout(() => {
+                        entry.target.style.transition = 'all 0.4s steps(5)';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, 100);
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            cardObserver.observe(card);
+        });
+    </script>
+</body>
+
+</html>
